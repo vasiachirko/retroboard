@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
+namespace App;
+
 class Application
 {
     public function run(): void
     {
+
         $uri = $_SERVER['REQUEST_URI'];
 
         $this->handleRoute($uri);
