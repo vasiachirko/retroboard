@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 class Application
 {
-    public function run()
+    public function run(): void
     {
-        require __DIR__ . '/../views/home.php';
+        $this->render('home');
+    }
+
+    private function render(string $view): void
+    {
+        require __DIR__ . "/../views/{$view}.php";
     }
 }
