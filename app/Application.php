@@ -4,29 +4,37 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Routing\Router;
+use App\View\View;
+
 class Application
 {
+    public function __construct(
+        private Router $router
+    ) {
+
+    }
+
     public function run(): void
     {
 
-        $uri = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $route = $this->router->resolve($method, $path);
 
-        $this->handleRoute($uri);
-    }
-
-    private function handleRoute(string $uri): void
-    {
-        $path = trim($uri, '/');
-
-        if ($path === '') {
-            $path = 'home';
+        if ($route === null) {
+            View::render('404');
+            return;
         }
 
-        $this->render($path);
-    }
+        $controllerClass = $route->getController();
 
-    private function render(string $view): void
-    {
-        require __DIR__ . "/../views/{$view}.php";
+        $controller = new $controllerClass();
+
+        $action = $route->getAction();
+
+        $view = $controller->$action();
+
+        View::render($view);
     }
 }

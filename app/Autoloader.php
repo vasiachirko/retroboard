@@ -19,7 +19,5 @@ class Autoloader
         $file = __DIR__ . '/' . str_replace('\\', '/', $relativeClass) . '.php';
 
         require_once $file;
-
-        echo $file . '<br>';
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
 declare(strict_types=1);
+
 require_once __DIR__ . '/app/Autoloader.php';
 
-$loader = new \App\Autoloader();
+spl_autoload_register([new App\Autoloader(), 'load']);
 
-spl_autoload_register([$loader, 'load']);
+$router = new App\Routing\Router();
 
-use App\Application;
+require __DIR__ . '/routes.php';
 
-$app = new Application();
+$app = new App\Application($router);
+
 $app->run();
